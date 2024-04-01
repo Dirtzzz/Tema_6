@@ -23,21 +23,15 @@
 ### При создании сайта у вас возникла потребность обрабатывать данные пользователя в странной форме, а потом переводить их в нужные вам форматы. Вы хотите принимать от пользователя последовательность чисел, разделенных пробелом, а после переформатировать эти данные в список и кортеж. Реализуйте вашу задумку. Для получения начальных данных используйте input(). Результатом программы будет выведенный список и кортеж из начальных данных.
 
 ```python
-chek = [8734, 2345, 8201, 6621, 9999, 1234, 5678, 8201, 8888, 4321, 3365, 1478, 9865, 5555,
-         7777, 9998, 1111, 2222, 3333, 4444, 5556, 6666, 5410, 7778, 8889, 4445, 1439, 9604,
-         8201, 3365, 7502, 3016, 4928, 5837, 8201, 2643, 5017, 9682, 8530, 3250, 7193, 9051,
-         4506, 1987, 3365, 5410, 7168, 7777, 9865, 5678, 8201, 4445, 3016, 4506, 4506]
+numbers = input('Введите числа: ')
 
-chek_count = len(chek)
-different_guests = len(set(chek))
-frequent_guest = max(chek, key=chek.count)
+lst = numbers.split()
+tpl = tuple(lst)
 
-print(f'Количество чеков: {chek_count}\n'
-      f'Число уникальных гостей: {different_guests}\n'
-      f'Самый частый гость: {frequent_guest}')
+print(lst, tpl, sep='\n')
 ```
 ### Результат:
-![Меню](https://github.com/Dirtzzz/Tema_2/blob/main/2.1.png)
+![Меню](https://github.com/Dirtzzz/Tema_6/blob/main/6.1.png)
 
 ## Самостоятельная работа №2
 ### Николай знает, что кортежи являются неизменяемыми, но он очень упрямый и всегда хочет доказать, что он прав. Студент решил создать функцию, которая будет удалять первое появление определенного элемента из кортежа по значению и возвращать кортеж без него. Попробуйте повторить шедевр не признающего авторитеты начинающего программиста. Но учтите, что Николай не всегда уверен в наличии элемента в кортеже (в этом случае кортеж вернется функцией в исходном виде).
@@ -51,51 +45,52 @@ print(f'Количество чеков: {chek_count}\n'
 (2, 4, 6, 6, 4, 2)
 
 ```python
-results = [10.2, 14.8, 19.3, 22.7, 12.5, 33.1, 38.9, 21.6, 26.4, 17.1, 30.2, 35.7, 16.9,
-           27.8, 24.5, 16.3, 18.7, 31.9, 12.9, 37.4]
+chisla = ['(1, 2, 3), 1)', '(1, 2, 3, 1, 2, 3, 4, 5, 2, 3, 4, 2, 4, 2), 3)', '(2, 4, 6, 6, 4, 2), 9)']
 
-results.sort()
-best_three = results[-3:]
-worst_three = results[:3]
-from_ten = results
 
-print(
-    f'Топ-3 лучших результата: {best_three}\n'
-    f'Топ-3 худших результата: {worst_three}\n'
-    f'Все результаты начиная с 10-ти: {from_ten}'
-    )
+def remove_element(chi, lo):
+    chisl = list(chi)
+    if lo in chisl:
+        chisl.remove(lo)
+        return tuple(chisl)
+    else:
+        return chi
+
+
+for chis in chisla:
+    chi = tuple(map(int, chis[:-4].strip('()').split(',')))
+    element = int(chi[-2:-1][0])
+    new_chislo = remove_element(chi, element)
+    print(new_chislo)
 ```
 
 ### Результат:
-![Меню](https://github.com/Dirtzzz/Tema_2/blob/main/2.2.png)
+![Меню](https://github.com/Dirtzzz/Tema_6/blob/main/6.2.png)
 
 ## Самостоятельная работа 3
 ### Ребята поспорили кто из них одним нажатием на numpad наберет больше повторяющихся цифр, но не понимают, как узнать победителя. Вам им нужно в этом помочь. Дана строка в виде случайной последовательности чисел от 0 до 9 (длина строки минимум 15 символов). Требуется создать словарь, который в качестве ключей будет принимать данные числа (т. е. ключи будут типом int), а в качестве значений - количество этих чисел в имеющейся последовательности. Для построения словаря создайте функцию, принимающую строку из цифр. Функция должна возвратить словарь из 3-х самых часто встречаемых чисел, также эти значения нужно вывести в порядке возрастания ключа.
 
 ```python
-from math import sqrt
-
-list = [[12, 25, 3, 48, 71], [5, 18, 40, 62, 98], [4, 21, 37, 56, 84]]
-max_triangle = []
-min_triangle = []
+numpad = input('Нажмите ладонью на numpad один раз\n')
 
 
-def count_area(a, b, c):
-    p = (a + b + c) / 2
-    s = sqrt(p * (p - a) * (p - b) * (p - c))
-    return s
+def count_numbers(string):
+    nums_freq = {}
+
+    for x in string:
+        x = int(x)
+        nums_freq[x] = nums_freq.get(x, 0) + 1
+
+    sorted_nums_freq = sorted(nums_freq.items(), key=lambda item: item[1])
+    top_tri = dict(sorted(sorted_nums_freq[-3:]))
+    return top_tri
 
 
-for partOfList in list:
-    max_triangle.append(max(partOfList))
-    min_triangle.append(min(partOfList))
-
-print(f'S Наибольшего треугольника равна {count_area(*max_triangle)}\nS Наименьшего треугольника равна {count_area(*min_triangle)}')
+print(count_numbers(numpad))
 ```
 
 ### Результат:
-![Меню](https://github.com/Dirtzzz/Tema_2/blob/main/2.3.png)
-![Меню](https://github.com/Dirtzzz/Tema_2/blob/main/2.3(2).png)
+![Меню](https://github.com/Dirtzzz/Tema_6/blob/main/6.3.png)
 
 ## Самостоятельная работа 4
 ### Ваш хороший друг владеет офисом со входом по электронным картам, ему нужно чтобы вы написали программу, которая показывала в каком порядке сотрудники входили и выходили из офиса. Определение сотрудника происходит по id. Напишите функцию, которая на вход принимает кортеж и случайный элемент (id), его можно придумать самостоятельно. Требуется вернуть новый кортеж, начинающийся с первого появления элемента в нем и заканчивающийся вторым его появлением включительно.
@@ -110,43 +105,42 @@ print(f'S Наибольшего треугольника равна {count_area
 (8, 3, 4, 8)
 (8, 5, 1, 2, 9)
 ```python
-rait = [
-    [2, 3, 4, 5, 3, 4, 5, 2, 2, 5, 3, 4, 3, 5, 4],
-    [4, 2, 3, 5, 3, 5, 4, 2, 2, 5, 4, 3, 5, 3, 4],
-    [5, 4, 3, 3, 4, 3, 3, 5, 5, 3, 3, 3, 3, 4, 4]
-]
+chisla = ['(1, 2, 3), 8)', '(1, 8, 3, 4, 8, 8, 9, 2), 8)', '(1, 2, 8, 5, 1, 2, 9), 8)']
 
+def find_element(chis, element):
+    if chis.count(element) > 0:
+        start_index = chis.index(element)
+        end_index = chis.index(element, start_index + 1) if chis.count(element) > 1 else ()
+        return chis[start_index:end_index + 1] if end_index != () else chis[start_index:]
+    else:
+        return ()
 
-def correction_grades(grades):
-    new_grades = [4 if i == 3 else i for i in grades if i != 2]
-    print(f'Исправленные:', *new_grades, sep='\n')
-
-
-if __name__ == '__main__':
-    correction_grades(rait)
+for chi in chisla:
+    chis = tuple(map(int, chi[1:-4].strip('()').split(',')))
+    element = int(chi[-2])
+    new_chislo = find_element(chis, element)
+    print(new_chislo)
 ```
 
 ### Результат:
-![Меню](https://github.com/Dirtzzz/Tema_2/blob/main/2.4.png)
+![Меню](https://github.com/Dirtzzz/Tema_6/blob/main/6.4.png)
 
 ## Самостоятельная работа 5
 ### Самостоятельно придумайте и решите задачу, в которой будут обязательно использоваться кортеж или список. Проведите минимум три теста для проверки работоспособности вашей задачи.
+Задача: В магазине техники есть множество позиций. В базе данных магазина занесена информация о каждой позиции на складе, в том числе и о цене. Необходимо посчитать стоимость всей техники на складе.
 
 ```python
-lists = [[1, 1, 3, 3, 1], [5, 5, 5, 5, 5, 5, 5], [2, 2, 1, 2, 2, 5, 6, 7, 1, 3, 2, 2]]
+hardware_info = [('Ноутбук acer', 10), ('Системные блок zalman', 30), ('Монитор @lg', 25), ('Телефон xiaomi', 53)]
+hardware_prices = {'Ноутбук acer': 50000, 'Системные блок zalman': 129999, 'Монитор @lg': 10000, 'Телефон xiaomi': 30000}
 
+total_price = 0
 
-def convert_to_set(list, setl):
-    for i in range(len(list)):
-        if list[:i + 1].count(list[i]) != 1:
-            setl.add(str(list[i]) * list[:i + 1].count(list[i]))
-    return setl
+for hardware, counts in hardware_info:
+    hardware_price = hardware_prices[hardware]
+    total_price += counts * hardware_price
 
-
-for l in lists:
-    setl = set(l)
-    print(convert_to_set(l, setl))
+print(f"Общая стоимость всей техники: {total_price} руб.")
 ```
 
 ### Результат:
-![Меню](https://github.com/Dirtzzz/Tema_2/blob/main/2.5.png)
+![Меню](https://github.com/Dirtzzz/Tema_6/blob/main/6.5.png)
